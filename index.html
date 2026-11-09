@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1d4e89">
-<title>Unidos Attendance</title>
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Unidos"><title>Unidos Attendance</title>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f1f4f8;--card:#fff;--tx:#14213d;--mu:#5b6678;--bd:#d9dee7;--pr:#1d4e89;--pt:#fff;--ok:#1e7b4f;--bad:#c0392b;--hd:#eaf0f8;--g2:#0b2545;--sb:#0b2545}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e131a;--card:#171f2a;--tx:#e8edf5;--mu:#98a3b5;--bd:#2a3544;--ok:#5cc593;--bad:#ef7b6e;--hd:#202b3a}}
@@ -261,4 +261,5 @@ weeks();applyBrand();$("#stin").value=staff.join("\n");
  if(canEdit)db.collection("contacts").onSnapshot(s=>{contacts={};s.docs.forEach(d=>contacts[+d.id.slice(1)]=d.data());dir()},e=>{});
  db.doc("config/staff").onSnapshot(s=>{if(false){staff=s.data().names;$("#stin").value=staff.join("\n");render()}});
  db.doc("config/brand").onSnapshot(s=>{if(s.exists){brand={...brand,...s.data()};applyBrand();render()}});sub()})();
-</script></body></html>
+</script><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))</script>
+</body></html>
