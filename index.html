@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d4e89">
+<title>Unidos Attendance</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f1f4f8;--card:#fff;--tx:#14213d;--mu:#5b6678;--bd:#d9dee7;--pr:#1d4e89;--pt:#fff;--ok:#1e7b4f;--bad:#c0392b;--hd:#eaf0f8;--g2:#0b2545;--sb:#0b2545}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e131a;--card:#171f2a;--tx:#e8edf5;--mu:#98a3b5;--bd:#2a3544;--ok:#5cc593;--bad:#ef7b6e;--hd:#202b3a}}
+:root[data-theme="dark"]{--bg:#0e131a;--card:#171f2a;--tx:#e8edf5;--mu:#98a3b5;--bd:#2a3544;--ok:#5cc593;--bad:#ef7b6e;--hd:#202b3a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:84px}
+.app{max-width:760px;margin:0 auto}
+header{background:var(--pr);color:var(--pt);padding:14px 16px;display:flex;gap:12px;align-items:center;border-radius:0 0 18px 18px}
+#lg{width:44px;height:44px;border-radius:12px;background:#fff;object-fit:contain;flex:none;display:flex;align-items:center;justify-content:center;color:var(--pr);font-weight:800;font-size:20px}
+header h1{margin:0;font-size:17px;line-height:1.2}header p{margin:2px 0 0;font-size:12px;opacity:.85}
+main{padding:14px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+select,input,button,textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px 10px}
+button{cursor:pointer}button.p{background:var(--pr);color:var(--pt);border-color:var(--pr)}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px}.tabs button{flex:none}.tabs button.on{background:var(--pr);color:var(--pt);border-color:var(--pr)}
+.st{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px;margin-bottom:10px}
+.st .top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.st .top b{font-size:15px}.tag{font-size:11px;font-weight:700;color:var(--ok)}.late{color:var(--bad)}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:8px}.g label{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;display:block}
+.g input[type=time]{width:100%;box-sizing:border-box}
+.ln{display:flex;gap:8px;margin-top:8px;align-items:center}.ln input{flex:1;min-width:0}
+.now{padding:3px 8px;font-size:12px;margin-top:4px}
+.sg img{height:36px;background:#fff;border:1px solid var(--bd);border-radius:6px}
+.mu{color:var(--mu);font-size:13px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden;font-size:14px}
+th{background:var(--hd);text-align:left;font-size:11px;text-transform:uppercase;color:var(--mu);padding:9px 8px}td{padding:9px 8px;border-top:1px solid var(--bd)}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--bd);display:flex;justify-content:center;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));gap:4px;z-index:5}
+nav button{border:0;background:none;flex:1;max-width:200px;font-size:12px;color:var(--mu);padding:6px}nav button span{display:block;font-size:20px}nav button.on{color:var(--pr);font-weight:700}
+.sec{display:none}.sec.on{display:block}
+dialog{border:1px solid var(--bd);border-radius:16px;background:var(--card);color:var(--tx);max-width:420px;width:92%}
+canvas{width:100%;height:150px;background:#fff;border:1px dashed var(--mu);border-radius:10px;touch-action:none;display:block}
+.row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}#toast{color:var(--bad);font-size:13px;min-height:18px}
+@media print{header~*:not(main),nav,.bar,.tabs,button{display:none!important}}
+header{background:linear-gradient(135deg,var(--pr),var(--g2));box-shadow:0 4px 14px rgba(0,0,0,.18)}#lg{box-shadow:0 0 0 3px rgba(255,255,255,.35)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.tile{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:10px 4px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)}.tile b{display:block;font-size:22px;color:var(--pr)}.tile span{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.05em}
+.st{box-shadow:0 1px 5px rgba(0,0,0,.06)}nav{box-shadow:0 -4px 14px rgba(0,0,0,.08)}button.p{box-shadow:0 2px 6px rgba(0,0,0,.15)}
+@media print{body.pb .app{display:none!important}}
+.dt{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}.dtile{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;box-shadow:0 1px 5px rgba(0,0,0,.06)}.ico{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}.dtile b{font-size:26px;display:block;line-height:1;color:var(--tx)}.dtile span{font-size:12px;color:var(--mu)}
+.dg{display:grid;gap:10px}.act{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--bd)}.act small{margin-left:auto;color:var(--mu)}#navlogo{display:none;color:#fff;font-weight:800;padding:4px 8px 16px;font-size:15px}
+@media(min-width:700px){.dt{grid-template-columns:repeat(4,1fr)}.dg{grid-template-columns:1.6fr 1fr}}
+@media(min-width:900px){nav{top:0;right:auto;width:210px;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:20px 12px;background:var(--sb);border:0;gap:6px}nav button{max-width:none;text-align:left;color:#c5d3ea;display:flex;align-items:center;gap:10px;font-size:14px;border-radius:10px;padding:11px 12px}nav button span{display:inline;font-size:18px}nav button.on{background:var(--pr);color:#fff}#navlogo{display:block}.app{max-width:1120px;margin:0 0 0 230px}body{padding-bottom:20px}header{border-radius:0 0 18px 18px}}
+</style></head><body><button id="adm" style="position:fixed;top:8px;right:8px;z-index:20;font-size:12px;padding:5px 10px;opacity:.9">Admin login</button>
+<div class="app">
+<header><div id="lg">U</div><div><h1 id="org">Unidos Social Innovation Center</h1><p>Staff Attendance · <span id="sub"></span></p></div></header>
+<main>
+<div class="bar"><select id="mo"></select><select id="yr"></select><select id="wk"></select></div>
+<div id="toast"></div>
+
+<section class="sec on" id="s-dash"><div class="st" style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><div class="mu" id="gdate"></div><b id="greet" style="font-size:18px"></b></div><button class="p" id="scan2">📷 Mark attendance</button></div>
+<div class="dt" id="dtiles"></div>
+<div class="dg"><div class="st"><b>Attendance overview</b><div class="mu">Staff present, selected week</div><div id="chart"></div></div><div class="st"><b>Recent activity</b><div id="recent"></div></div></div></section>
+
+<section class="sec" id="s-reg"><div class="tiles" id="tiles"></div><div class="row" style="margin:0 0 12px"><button class="p" id="scanb">📷 Scan badge (QR)</button></div>
+<div class="tabs" id="tabs"></div><div id="list"></div></section>
+
+<section class="sec" id="s-sum"><div class="bar"><button id="csv" class="p">Export month (CSV)</button><button onclick="print()">Print</button></div>
+<div class="st" id="daily"></div><p class="mu" id="sumn"></p><div style="overflow-x:auto"><table><thead><tr><th>Staff</th><th>Present</th><th>Late</th><th>Leave</th><th>Absent</th><th>Hours</th><th>Rate</th></tr></thead><tbody id="sb"></tbody></table></div></section>
+
+<section class="sec" id="s-stf"><p class="mu" id="dirn"></p><div id="dir"></div></section>
+
+<section class="sec" id="s-set"><div class="st"><b>Organisation branding</b><p class="mu" id="perm"></p>
+<div class="ln"><input id="orgin" placeholder="Organisation name"></div>
+<div class="ln"><span class="mu">Logo</span><input type="file" id="logoin" accept="image/*"></div>
+<div class="ln" style="flex-wrap:wrap"><span class="mu" style="width:100%">Theme (tap to preview the whole app, then Save branding)</span><span id="themes" style="display:flex;gap:10px;flex-wrap:wrap"></span></div>
+<div class="ln" style="flex-wrap:wrap"><span class="mu" style="width:100%">Background colour</span><span id="bgs" style="display:flex;gap:10px;flex-wrap:wrap"></span></div>
+<div class="ln"><span class="mu">Brand colour</span><input type="color" id="col" value="#1d4e89" style="padding:2px;height:38px;flex:none;width:60px"></div>
+<div class="ln"><span class="mu">Official start time</span><input type="time" id="startin" value="08:30" style="flex:none"></div>
+<div class="row"><button class="p" id="bsv">Save branding</button></div></div>
+<div class="st" hidden><b>Staff names</b><p class="mu">One per line, up to 20.</p><textarea id="stin" rows="12" style="width:100%;box-sizing:border-box"></textarea><div class="row"><button class="p" id="ssv">Save staff names</button></div></div>
+<p class="mu">Tip: on your phone, open the page menu and choose “Add to Home Screen” to keep it like an app.</p></section>
+</main>
+<nav><div id="navlogo"></div><button class="on" data-t="dash"><span>🏠</span>Dashboard</button><button data-t="reg"><span>📋</span>Register</button><button data-t="sum"><span>📊</span>Reports</button><button data-t="stf"><span>👥</span>Staff</button><button data-t="set"><span>⚙️</span>Settings</button></nav>
+</div>
+
+<dialog id="sc"><h3 style="margin:0 0 8px">Scan staff badge</h3><video id="sv2" playsinline muted style="width:100%;border-radius:10px;background:#000"></video><div class="mu" id="sm" style="margin-top:6px"></div><div class="ln"><input id="manual" placeholder="Or type Staff ID / badge code"><button id="mgo">Go</button></div><div class="row"><span style="flex:1"></span><button id="scx">Close</button></div></dialog>
+<dialog id="bd"><div id="bc" style="text-align:center"></div><div class="row"><button id="bdl" class="p">⬇ Download QR</button><button id="bpr">Print</button><span style="flex:1"></span><button id="bx">Close</button></div></dialog>
+<dialog id="pd"><h3 style="margin:0 0 8px">Staff profile</h3>
+<div class="ln"><div id="pph" style="width:64px;height:64px;border-radius:50%;background:var(--hd);overflow:hidden;flex:none"></div><input type="file" id="pf" accept="image/*"></div>
+<div class="ln"><input id="p-name" placeholder="Full name"></div>
+<div class="ln"><input id="p-sid" placeholder="Staff ID"><input id="p-post" placeholder="Post / position"></div>
+<div class="ln"><input id="p-dept" placeholder="Department"><input id="p-date" type="date" title="Date joined"></div>
+<div class="ln"><select id="p-gen" style="flex:1"><option value="">Gender</option><option>Female</option><option>Male</option><option>Other</option></select></div>
+<div class="ln"><input id="p-mail" type="email" placeholder="Email"></div>
+<div class="ln"><input id="p-tel" type="tel" placeholder="Phone number"><input id="p-emg" placeholder="Emergency contact"></div>
+<div class="ln"><input id="p-nid" placeholder="National ID / passport no. (private)"></div>
+<p class="mu" style="margin:8px 0 0">Email, phone, emergency contact and ID number are visible only to the owner and editors.</p>
+<div class="row"><span style="flex:1"></span><button id="pc">Cancel</button><button class="p" id="ps">Save</button></div></dialog>
+
+<dialog id="dlg"><h3 style="margin:0 0 4px" id="dn"></h3><div class="mu" id="dd"></div>
+<div class="row"><button id="bio">🔐 Verify with fingerprint / Face ID</button></div><div class="mu" id="bs" style="margin-top:6px"></div>
+<div class="row"><button id="fc">🙂 Face check (selfie)</button></div><video id="fv" playsinline muted style="width:100%;border-radius:10px;display:none;margin-top:8px"></video><input type="file" id="fcf" accept="image/*" capture="user" hidden>
+<p class="mu" style="margin:10px 0 4px">Sign below</p><canvas id="cv" width="600" height="300"></canvas>
+<div class="row"><button id="clr">Clear</button><span style="flex:1"></span><button id="cx">Cancel</button><button class="p" id="sv">Save signature</button></div></dialog>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* ======== STEP 1: PASTE YOUR FIREBASE SETTINGS HERE ======== */
+const FIREBASE_CONFIG={
+  apiKey:"AIzaSyBPEN3xWuMWErKO5CsnabICUSEfAIlP4-A",
+  authDomain:"unidos-attendance.firebaseapp.com",
+  projectId:"unidos-attendance",
+  appId:"1:132926595326:web:dda4473fa440f3e9d6c5af"
+};
+/* =========================================================== */
+firebase.initializeApp(FIREBASE_CONFIG);
+const _auth=firebase.auth(),_fs=firebase.firestore();let _user=null;
+const _ready=new Promise(r=>_auth.onAuthStateChanged(u=>{_user=u;r()}));
+window.claude={use:async n=>{await _ready;
+ if(n==='user')return{canEdit:()=>!!_user};
+ if(n==='db')return _fs;
+ if(n==='downloads')return{save:async({filename,data})=>{const b=data instanceof Blob?data:new Blob([data]),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}};
+ return null}};
+_ready.then(()=>{const b=document.getElementById('adm');b.textContent=_user?'Admin: sign out':'Admin login';
+ b.onclick=async()=>{if(_user){await _auth.signOut();location.reload();return}
+  const e=prompt('Admin email');const p=e&&prompt('Admin password');if(!p)return;
+  try{await _auth.signInWithEmailAndPassword(e,p);location.reload()}catch(x){alert('Login failed - check email and password')}}});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const $=s=>document.querySelector(s),MN=["January","February","March","April","May","June","July","August","September","October","November","December"],DN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const mon=d=>{const x=new Date(d);x.setDate(x.getDate()-(x.getDay()+6)%7);return iso(x)};
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let roster={},contacts={},db=null,user=null,unsub=null,cache={},selDate=null,canEdit=false,brand={org:"Unidos Social Innovation Center",color:"#1d4e89",start:"08:30",logo:""},staff=Array.from({length:20},(_,i)=>"Staff member "+(i+1));
+const T=new Date();
+$("#mo").innerHTML=MN.map((m,i)=>`<option value="${i}">${m}</option>`).join("");$("#mo").value=T.getMonth();
+$("#yr").innerHTML=[T.getFullYear()-1,T.getFullYear(),T.getFullYear()+1].map(y=>`<option>${y}</option>`).join("");$("#yr").value=T.getFullYear();
+const av=i=>{const p=roster[i]||{};return p.photo?`<img src="${p.photo}" alt="" style="width:40px;height:40px;border-radius:50%;object-fit:cover">`:`<div style="width:40px;height:40px;border-radius:50%;background:var(--hd);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--pr)">${esc((staff[i]||"?")[0])}</div>`};
+let pi=0,pphoto="";
+function dir(){$("#dirn").textContent=canEdit?"Tap Edit to add a photo, post, email and phone for each person.":"Staff directory";
+ $("#dir").innerHTML=staff.map((n,i)=>{const p=roster[i]||{},c=contacts[i]||{};return `<div class="st"><div class="top"><div style="display:flex;gap:10px;align-items:center">${av(i)}<div><b>${esc(n)}</b><div class="mu">${esc(p.post||"No post yet")}${p.sid?" · ID "+esc(p.sid):""}${p.dept?" · "+esc(p.dept):""}</div>${canEdit?`<div class="mu">${esc(c.email||"")} ${esc(c.phone||"")} ${esc(c.gender||"")}</div>`:""}</div></div>${canEdit?`<div style='display:flex;flex-direction:column;gap:6px'><button data-pe='${i}'>Edit</button><button data-pb='${i}'>Badge</button></div>`:""}</div></div>`}).join("");
+ $("#dir").querySelectorAll("[data-pe]").forEach(b=>b.onclick=()=>openProf(+b.dataset.pe));$("#dir").querySelectorAll("[data-pb]").forEach(b=>b.onclick=()=>openBadge(+b.dataset.pb))}
+function setPh(){$("#pph").innerHTML=pphoto?`<img src="${pphoto}" style="width:100%;height:100%;object-fit:cover">`:""}
+function openProf(i){pi=i;const p=roster[i]||{},c=contacts[i]||{};pphoto=p.photo||"";setPh();
+ $("#p-name").value=staff[i];$("#p-sid").value=p.sid||"";$("#p-post").value=p.post||"";$("#p-dept").value=p.dept||"";$("#p-date").value=p.joined||"";$("#p-mail").value=c.email||"";$("#p-tel").value=c.phone||"";$("#p-emg").value=c.emergency||"";$("#p-nid").value=c.nid||"";$("#p-gen").value=c.gender||"";$("#pd").showModal()}
+$("#pc").onclick=()=>$("#pd").close();
+$("#pf").onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const s=Math.min(1,240/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);pphoto=c.toDataURL("image/jpeg",.8);setPh()};im.src=URL.createObjectURL(f)};
+$("#ps").onclick=async()=>{const g=k=>$("#p-"+k).value.trim();
+ const pub={name:g("name")||staff[pi],sid:g("sid"),post:g("post"),dept:g("dept"),joined:$("#p-date").value,photo:pphoto},prv={email:g("mail"),phone:g("tel"),emergency:g("emg"),nid:g("nid"),gender:$("#p-gen").value};
+ try{await db.doc("roster/s"+pi).set(pub);await db.doc("contacts/s"+pi).set(prv);$("#pd").close()}catch(e){toast("Could not save: "+(e.code||e))}};
+const ST=["","Annual leave","Sick leave","Permission","Official duty"];
+function dash(){const h=T.getHours();$('#greet').textContent='Hello, team! '+(h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening');$('#gdate').textContent=new Date(selDate+'T00:00').toDateString();$('#navlogo').textContent=brand.org;
+ let p=0,v=0;const ev=[];staff.forEach((n,i)=>{const r=cache[selDate+'_'+i]||{};if(r.in){p++;ev.push([r.in,i,'Checked In'])}if(r.out)ev.push([r.out,i,'Checked Out']);if(!r.in&&r.status)v++});
+ const ab=selDate<=iso(T)?staff.length-p-v:0;
+ $('#dtiles').innerHTML=[['Total staff',staff.length,'👥','#dbeafe'],['Present',p,'✔','#d1fae5'],['On leave',v,'🌴','#fef3c7'],['Absent',ab,'✖','#fee2e2']].map(a=>`<div class='dtile'><div class='ico' style='background:${a[3]}'>${a[2]}</div><div><b>${a[1]}</b><span>${a[0]}</span></div></div>`).join('');
+ const mo=new Date($('#wk').value+'T00:00'),bars=[];for(let k=0;k<5;k++){const d=new Date(mo);d.setDate(mo.getDate()+k);const key=iso(d);let c=0;staff.forEach((n,i)=>{const r=cache[key+'_'+i];if(r&&r.in)c++});bars.push([DN[d.getDay()],c])}
+ const H=150;$('#chart').innerHTML=`<svg viewBox='0 0 300 ${H+24}' style='width:100%'>${[0,5,10,15,20].map(g=>`<line x1='24' x2='300' y1='${H-g/20*H}' y2='${H-g/20*H}' stroke='var(--bd)'/><text x='0' y='${H-g/20*H+4}' font-size='9' fill='var(--mu)'>${g}</text>`).join('')}${bars.map((b,k)=>{const x=40+k*50,bh=Math.min(b[1],20)/20*H;return `<rect x='${x}' y='${H-bh}' width='28' height='${bh}' rx='5' fill='var(--pr)'/><text x='${x+14}' y='${H+14}' font-size='10' text-anchor='middle' fill='var(--mu)'>${b[0]}</text>`}).join('')}</svg>`;
+ ev.sort((a,b)=>b[0].localeCompare(a[0]));$('#recent').innerHTML=ev.slice(0,6).map(e=>`<div class='act'>${av(e[1])}<div><b style='font-size:14px'>${esc(staff[e[1]])}</b><div class='mu'>${e[2]}</div></div><small>${e[0]}</small></div>`).join('')||`<p class='mu'>No activity yet for this day.</p>`;daily()}
+function daily(){const L={Present:[],Late:[],Leave:[],Absent:[]};staff.forEach((n,i)=>{const r=cache[selDate+'_'+i]||{};if(r.in){L.Present.push(n);if(r.in>brand.start)L.Late.push(n)}else if(r.status)L.Leave.push(n+' ('+r.status+')');else if(selDate<=iso(T))L.Absent.push(n)});
+ let g='';if(canEdit){const c={};staff.forEach((n,i)=>{const r=cache[selDate+'_'+i]||{},x=(contacts[i]||{}).gender;if(r.in&&x)c[x]=(c[x]||0)+1});g=Object.keys(c).length?`<div class='mu'>Present by gender: ${Object.entries(c).map(a=>a[0]+' '+a[1]).join(' · ')}</div>`:''}
+ $('#daily').innerHTML=`<b>Daily report - ${selDate}</b>${g}`+Object.entries(L).map(a=>`<p style='margin:8px 0 0'><b>${a[0]} (${a[1].length})</b><br><span class='mu'>${a[1].map(esc).join(', ')||'-'}</span></p>`).join('')}
+$('#scan2').onclick=()=>$('#scanb').click();
+const TH=[['Corporate Blue','#1d4e89','#0b2545','#f1f4f8'],['Emerald Green','#0f766e','#064e3b','#eef7f4'],['Royal Purple','#5b3fa8','#2e1a5c','#f4f2fa'],['Sunset Orange','#d9480f','#3a2216','#fbf5ef'],['Executive Slate','#334155','#334155','#f3f4f6'],['Ocean Teal','#0e7490','#083344','#eff8fa'],['Crimson Red','#b91c1c','#450a0a','#fbf2f2'],['Midnight Indigo','#3730a3','#1e1b4b','#f2f2fb'],['Forest Olive','#4d7c0f','#1a2e05','#f5f8ef'],['Rose Pink','#be185d','#4a0d2a','#fbf1f5'],['Gold & Navy','#b7791f','#12263f','#faf6ec'],['Sky Light','#0284c7','#0369a1','#f0f8fd'],['Teal & Coral','#e4572e','#134e4a','#f4f9f8'],['Graphite Black','#111827','#030712','#f4f4f5'],['Burgundy Wine','#7f1d4e','#3b0a24','#f8f2f5']];
+$('#themes').innerHTML=TH.map((t,k)=>`<button data-th='${k}' title='${t[0]}' style='width:78px;padding:6px;text-align:center;font-size:10px'><div style='height:30px;border-radius:8px;margin-bottom:4px;background:linear-gradient(135deg,${t[1]},${t[2]})'></div>${t[0]}</button>`).join('');
+$('#themes').querySelectorAll('button').forEach(b=>b.onclick=()=>{brand.color=TH[+b.dataset.th][1];brand.theme=+b.dataset.th;applyBrand()});
+const BG=[['Theme default',''],['White','#ffffff'],['Milk','#fbf8f1'],['Soft Grey','#f1f3f6'],['Mint','#eaf6f1'],['Sky','#eaf3fb']];
+$('#bgs').innerHTML=BG.map((b,k)=>`<button data-bg='${k}' style='width:78px;padding:6px;text-align:center;font-size:10px'><div style='height:30px;border-radius:8px;margin-bottom:4px;border:1px solid var(--bd);background:${b[1]||'linear-gradient(135deg,#eee 50%,#ccc 50%)'}'></div>${b[0]}</button>`).join('');
+$('#bgs').querySelectorAll('button').forEach(b=>b.onclick=()=>{brand.bg=BG[+b.dataset.bg][1];applyBrand()});
+const QRU=location.href.split('#')[0]+'#scan-';let PH=null;{const mh=location.hash.match(/^#scan-(\d+)$/);if(mh)PH=+mh[1]}
+async function scanHit(i){selDate=iso(T);$('#sm').textContent='';$('#sc').showModal();await stamp('scan-'+i)}
+addEventListener('hashchange',()=>{const m=location.hash.match(/^#scan-(\d+)$/);if(m)scanHit(+m[1])});
+$('#fcf').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const s=160/Math.max(im.width,im.height),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);faceImg=c.toDataURL('image/jpeg',.7);$('#bs').textContent='✔ Face check: photo captured'};im.src=URL.createObjectURL(f)};
+function tiles(){let p=0,l=0,v=0;staff.forEach((n,i)=>{const r=cache[selDate+'_'+i]||{};if(r.in){p++;if(r.in>brand.start)l++}else if(r.status)v++});$('#tiles').innerHTML=[['Present',p],['Late',l],['On leave',v],['Not yet',staff.length-p-v]].map(a=>`<div class='tile'><b>${a[1]}</b><span>${a[0]}</span></div>`).join('')}
+let faceImg='',fstream=null,cstream=null,ctimer=null,last='';
+function stopCam(){clearInterval(ctimer);cstream&&cstream.getTracks().forEach(t=>t.stop());cstream=null}
+function stopFace(){fstream&&fstream.getTracks().forEach(t=>t.stop());fstream=null;$('#fv').style.display='none';$('#fc').textContent='🙂 Face check (selfie)'}
+function find(code){code=String(code).trim();{const m=code.match(/(?:UNIDOS:|scan-)(\d+)$/i);if(m)return +m[1]}return staff.findIndex((n,i)=>roster[i]&&roster[i].sid&&roster[i].sid.toLowerCase()==code.toLowerCase())}
+async function stamp(code){const i=find(code);if(i<0||i>=staff.length)return $('#sm').textContent='Badge not recognised.';
+ if(scanFor>=0){if(i!==scanFor)return $('#sm').textContent='This badge belongs to '+staff[i]+', not '+staff[scanFor]+'.';await save(i,{method:'QR badge ✔',signedAt:new Date().toISOString()});$('#sm').textContent='✔ Signed by QR: '+staff[i];setTimeout(()=>$('#sc').close(),1200);return}
+ if(selDate!==iso(T))return $('#sm').textContent='Select today in the Register first.';
+ const r=cache[selDate+'_'+i]||{},f=!r.in?'in':(!r.out?'out':'');if(!f)return $('#sm').textContent=staff[i]+' already has both times today.';
+ const t=new Date(),v=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');await save(i,{[f]:v,...(r.method?{}:{method:'QR badge ✔',signedAt:new Date().toISOString()})});$('#sm').textContent='✔ '+staff[i]+' - '+(f=='in'?'clocked in ':'clocked out ')+v}
+let scanFor=-1;
+async function openScan(t){scanFor=t;$('#sm').textContent=t>=0?'Sign for '+staff[t]+' - scan their badge QR':'';$('#sc').showModal();
+ try{cstream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});const v=$('#sv2');v.srcObject=cstream;await v.play();
+  if(!('BarcodeDetector' in window)){$('#sm').textContent='Live scanning is not supported by this browser - type the Staff ID below.';return}
+  const d=new BarcodeDetector({formats:['qr_code']});
+  ctimer=setInterval(async()=>{try{const c=await d.detect(v);if(c.length&&c[0].rawValue!==last){last=c[0].rawValue;stamp(last);setTimeout(()=>last='',4000)}}catch(e){}},500)
+ }catch(e){$('#sm').textContent='Camera is blocked in this view - scan the badge with your phone camera app instead, or type the Staff ID below.'}}
+$('#scanb').onclick=()=>openScan(-1);
+$('#mgo').onclick=()=>{stamp($('#manual').value);$('#manual').value=''};$('#scx').onclick=()=>$('#sc').close();$('#sc').onclose=stopCam;
+$('#fc').onclick=async()=>{const v=$('#fv');
+ try{if(!fstream){fstream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}});v.srcObject=fstream;v.style.display='block';await v.play();$('#fc').textContent='📸 Capture';return}
+  const c=document.createElement('canvas'),s=160/Math.max(v.videoWidth,v.videoHeight);c.width=v.videoWidth*s;c.height=v.videoHeight*s;c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+  let ok=true,note='Photo captured';
+  if('FaceDetector' in window){try{const f=await new FaceDetector().detect(v);ok=f.length>0;note=ok?'Face detected':'No face found - try again'}catch(e){}}
+  if(ok){faceImg=c.toDataURL('image/jpeg',.7);$('#bs').textContent='✔ Face check: '+note;stopFace()}else $('#bs').textContent=note
+ }catch(e){$('#bs').textContent='Camera blocked here - opening the phone camera app instead.';$('#fcf').click()}};
+$('#dlg').onclose=stopFace;
+let bidx=0;
+function openBadge(i){bidx=i;const p=roster[i]||{};$('#bc').innerHTML=`<div style='font-weight:800;color:var(--pr)'>${esc(brand.org)}</div><div style='margin:10px 0'>${av(i).replace(/40px/g,'96px')}</div><div style='font-size:18px;font-weight:700'>${esc(staff[i])}</div><div class='mu'>${esc(p.post||'')}${p.sid?' · ID '+esc(p.sid):''}</div><div id='bq' style='display:inline-block;margin-top:12px;background:#fff;padding:8px;border-radius:8px'></div><div class='mu'>UNIDOS:${i}</div>`;
+ try{new QRCode($('#bq'),{text:QRU+i,width:140,height:140})}catch(e){}$('#bd').showModal()}
+function dlQR(){const i=bidx,d=document.createElement('div');try{new QRCode(d,{text:QRU+i,width:480,height:480})}catch(e){return toast('QR could not be created.')}
+ setTimeout(()=>{const c=d.querySelector('canvas');if(!c)return toast('QR could not be created.');const o=document.createElement('canvas');o.width=o.height=560;const x=o.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,560,560);x.drawImage(c,40,40,480,480);
+  o.toBlob(async b=>{const dl=await claude.use('downloads');if(!dl)return toast('Download not available in this view.');try{await dl.save({filename:'QR-'+(staff[i]||'staff').replace(/[^a-z0-9]+/gi,'-')+'.png',data:b})}catch(e){}})},100)}
+$('#bdl').onclick=dlQR;
+$('#bx').onclick=()=>$('#bd').close();$('#bpr').onclick=()=>{document.body.classList.add('pb');print();setTimeout(()=>document.body.classList.remove('pb'),500)};
+function toast(t){$("#toast").textContent=t;setTimeout(()=>$("#toast").textContent="",5000)}
+function wdays(){const y=+$("#yr").value,m=+$("#mo").value,o=[],d=new Date(y,m,1);while(d.getMonth()==m){if(d.getDay()%6)o.push(new Date(d));d.setDate(d.getDate()+1)}return o}
+function weeks(){const w=[...new Set(wdays().map(mon))];$("#wk").innerHTML=w.map(k=>`<option value="${k}">Week of ${+k.slice(8)} ${MN[+k.slice(5,7)-1].slice(0,3)}</option>`).join("");const c=mon(T);$("#wk").value=w.includes(c)?c:w[0];tabs()}
+function tabs(){const wk=$("#wk").value,days=wdays().filter(d=>mon(d)==wk);
+ if(!days.some(d=>iso(d)==selDate))selDate=iso(days.find(d=>iso(d)==iso(T))||days[0]);
+ $("#tabs").innerHTML=days.map(d=>`<button class="${iso(d)==selDate?"on":""}" data-d="${iso(d)}">${DN[d.getDay()]} ${d.getDate()}</button>`).join("");
+ $("#tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{selDate=b.dataset.d;tabs()});render()}
+function sub(){if(!db)return;unsub&&unsub();const ym=$("#yr").value+"-"+String(+$("#mo").value+1).padStart(2,"0");cache={};
+ unsub=db.collection("attendance").where("ym","==",ym).onSnapshot(s=>{cache={};s.docs.forEach(d=>cache[d.id]=d.data());render();if(PH!=null){const k=PH;PH=null;scanHit(k)}},e=>toast("Load error: "+e.code))}
+function render(){if(!selDate)return;$("#sub").textContent=MN[+$("#mo").value]+" "+$("#yr").value;
+ $("#list").innerHTML=staff.map((n,i)=>{const r=cache[selDate+"_"+i]||{},late=r.in&&r.in>brand.start;
+ return `<div class="st"><div class="top"><div style="display:flex;gap:10px;align-items:center">${av(i)}<div><b>${i+1}. ${esc(n)}</b><div class="mu">${esc((roster[i]||{}).post||"")}</div></div></div>${r.in?`<span class="tag ${late?"late":""}">${late?"Late":"On time"}</span>`:""}</div>
+ <div class="g"><div><label>Coming time</label><input type="time" data-i="${i}" data-f="in" value="${r.in||""}"><button class="now" data-i="${i}" data-f="in">Now</button></div>
+ <div><label>Out time</label><input type="time" data-i="${i}" data-f="out" value="${r.out||""}"><button class="now" data-i="${i}" data-f="out">Now</button></div></div>
+ <div class="ln"><select data-i="${i}" data-f="status" style="flex:1">${ST.map(s=>`<option value="${s}" ${r.status==s?"selected":""}>${s||"Status: normal day"}</option>`).join("")}</select></div>
+ <div class="ln"><div class="sg">${r.sig?`<img src="${r.sig}" alt="signature">`:""}${r.face?`<img src="${r.face}" alt="face" style="border-radius:50%;width:36px;margin-left:4px">`:""}${r.method?`<div class="tag">${esc(r.method)}</div>`:`<button data-qs="${i}">🔳 Sign with QR</button><button data-sign="${i}">✍️ Sign</button>`}</div><input data-i="${i}" data-f="rem" value="${esc(r.rem||"")}" placeholder="Remarks"></div></div>`}).join("");
+ $("#list").querySelectorAll("input,select").forEach(e=>e.onchange=()=>save(+e.dataset.i,{[e.dataset.f]:e.value}));
+ $("#list").querySelectorAll(".now").forEach(b=>b.onclick=()=>{const t=new Date();save(+b.dataset.i,{[b.dataset.f]:String(t.getHours()).padStart(2,"0")+":"+String(t.getMinutes()).padStart(2,"0")})});
+ $("#list").querySelectorAll("[data-sign]").forEach(b=>b.onclick=()=>openSign(+b.dataset.sign));$("#list").querySelectorAll("[data-qs]").forEach(b=>b.onclick=()=>openScan(+b.dataset.qs));tiles();dash();summary()}
+function hrs(r){if(!r.in||!r.out)return 0;const[a,b]=r.in.split(":"),[c,d]=r.out.split(":");return Math.max(0,(+c*60+ +d)-(+a*60+ +b))/60}
+function summary(){const td=iso(T),days=wdays().map(iso).filter(d=>d<=td);
+ $("#sumn").textContent=`${days.length} working day(s) counted so far this month · official start ${brand.start}`;
+ $("#sb").innerHTML=staff.map((n,i)=>{let p=0,l=0,h=0,lv=0;days.forEach(d=>{const r=cache[d+"_"+i];if(r&&r.status&&!r.in)lv++;if(r&&r.in){p++;if(r.in>brand.start)l++;h+=hrs(r)}});
+ return `<tr><td>${esc(n)}</td><td>${p}</td><td class="${l?"late":""}">${l}</td><td>${lv}</td><td>${days.length-p-lv}</td><td>${h.toFixed(1)}</td><td>${days.length-lv>0?Math.round(100*p/(days.length-lv)):0}%</td></tr>`}).join("")}
+async function save(i,p){if(!db)return toast("Sign in to claude.ai to save.");const id=selDate+"_"+i,d={...(cache[id]||{}),...p,date:selDate,ym:selDate.slice(0,7),i,name:staff[i]};cache[id]=d;render();
+ try{await db.collection("attendance").doc(id).set(d)}catch(e){toast("Could not save: "+(e.code||e))}}
+/* signature */
+const cv=$("#cv"),cx=cv.getContext("2d");let draw=false,inked=false,bioOk=false,cur=0;
+function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]}
+cv.onpointerdown=e=>{draw=true;cv.setPointerCapture(e.pointerId);const[x,y]=pt(e);cx.beginPath();cx.moveTo(x,y);cx.lineWidth=4;cx.lineCap="round";cx.strokeStyle="#111"};
+cv.onpointermove=e=>{if(!draw)return;const[x,y]=pt(e);cx.lineTo(x,y);cx.stroke();inked=true};cv.onpointerup=()=>draw=false;
+$("#clr").onclick=()=>{cx.clearRect(0,0,cv.width,cv.height);inked=false};
+function openSign(i){cur=i;inked=bioOk=false;faceImg='';stopFace();cx.clearRect(0,0,cv.width,cv.height);$("#bs").textContent="";$("#dn").textContent=staff[i];$("#dd").textContent=selDate;$("#dlg").showModal()}
+$("#cx").onclick=()=>$("#dlg").close();
+$("#bio").onclick=async()=>{try{if(!window.PublicKeyCredential||!await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable())throw 0;
+ await navigator.credentials.create({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rp:{name:"Unidos SIC"},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:staff[cur],displayName:staff[cur]},pubKeyCredParams:[{type:"public-key",alg:-7},{type:"public-key",alg:-257}],authenticatorSelection:{authenticatorAttachment:"platform",userVerification:"required"},timeout:60000}});
+ bioOk=true;$("#bs").textContent="✔ Device biometric confirmed"}catch(e){$("#bs").textContent="Biometric not available here — please draw your signature instead."}};
+$("#sv").onclick=async()=>{if(!inked&&!bioOk&&!faceImg)return $("#bs").textContent="Please sign or verify with biometric first.";
+ await save(cur,{sig:inked?cv.toDataURL("image/png"):"",face:faceImg,method:[bioOk&&"Biometric ✔",faceImg&&"Face check ✔",inked&&"Signed"].filter(Boolean).join(" + "),signedAt:new Date().toISOString()});$("#dlg").close()};
+/* nav + branding */
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x==b));document.querySelectorAll(".sec").forEach(s=>s.classList.toggle("on",s.id=="s-"+b.dataset.t));$(".bar").style.display=["set","stf"].includes(b.dataset.t)?"none":""});
+function applyBrand(){document.documentElement.style.setProperty("--pr",brand.color);if(brand.theme!=null&&TH[brand.theme]){const t=TH[brand.theme],r=document.documentElement.style;r.setProperty("--g2",t[2]);r.setProperty("--sb",t[2]);if(!matchMedia("(prefers-color-scheme: dark)").matches)r.setProperty("--bg",t[3])}if(brand.bg&&!matchMedia("(prefers-color-scheme: dark)").matches)document.documentElement.style.setProperty("--bg",brand.bg);$("#org").textContent=brand.org;document.title=brand.org+" – Attendance";
+ $("#lg").innerHTML=brand.logo?`<img src="${brand.logo}" alt="" style="width:100%;height:100%;object-fit:contain;border-radius:12px">`:esc((brand.org||"U")[0]);
+ $("#orgin").value=brand.org;$("#col").value=brand.color;$("#startin").value=brand.start;
+ [...document.querySelectorAll("#s-set input,#s-set textarea,#s-set button")].forEach(e=>e.disabled=!canEdit);$("#perm").textContent=canEdit?"Changes here apply for everyone.":"Only the owner or an editor can change settings."}
+$("#logoin").onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const s=Math.min(1,256/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);brand.logo=c.toDataURL("image/png");applyBrand()};im.src=URL.createObjectURL(f)};
+$("#bsv").onclick=async()=>{brand={...brand,org:$("#orgin").value.trim()||brand.org,color:$("#col").value,start:$("#startin").value||"08:30"};applyBrand();render();try{await db.doc("config/brand").set(brand);toast("Saved.")}catch(e){toast("Could not save branding")}};
+$("#ssv").onclick=async()=>{const n=$("#stin").value.split("\n").map(s=>s.trim()).filter(Boolean).slice(0,20);while(n.length<20)n.push("Staff member "+(n.length+1));staff=n;render();try{await db.doc("config/staff").set({names:n});toast("Saved.")}catch(e){toast("Could not save names")}};
+$("#csv").onclick=async()=>{const dl=await claude.use("downloads");if(!dl)return toast("Download not available here.");
+ const rows=[["Date","Staff","Coming time","Out time","Status","Signature","Remarks"],...Object.values(cache).sort((a,b)=>a.date.localeCompare(b.date)||a.i-b.i).map(r=>[r.date,r.name,r.in||"",r.out||"",r.status||"",r.method||"",r.rem||""])];
+ try{await dl.save({filename:"attendance-"+$("#yr").value+"-"+String(+$("#mo").value+1).padStart(2,"0")+".csv",data:rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n")})}catch(e){}};
+$("#mo").onchange=$("#yr").onchange=()=>{weeks();sub()};$("#wk").onchange=tabs;
+weeks();applyBrand();$("#stin").value=staff.join("\n");
+(async()=>{try{user=await claude.use("user");db=await claude.use("db")}catch(e){}
+ if(!db)return toast("Could not connect to the database - check the Firebase settings.");canEdit=!!(user&&user.canEdit());applyBrand();
+ db.collection("roster").onSnapshot(s=>{roster={};s.docs.forEach(d=>roster[+d.id.slice(1)]=d.data());staff=staff.map((n,i)=>(roster[i]&&roster[i].name)||n);render();dir()},e=>{});
+ if(canEdit)db.collection("contacts").onSnapshot(s=>{contacts={};s.docs.forEach(d=>contacts[+d.id.slice(1)]=d.data());dir()},e=>{});
+ db.doc("config/staff").onSnapshot(s=>{if(false){staff=s.data().names;$("#stin").value=staff.join("\n");render()}});
+ db.doc("config/brand").onSnapshot(s=>{if(s.exists){brand={...brand,...s.data()};applyBrand();render()}});sub()})();
+</script></body></html>
