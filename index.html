@@ -167,6 +167,11 @@ const QRU=location.href.split('#')[0]+'#scan-';let PH=null;{const mh=location.ha
 async function scanHit(i){selDate=iso(T);$('#sm').textContent='';$('#sc').showModal();await stamp('scan-'+i)}
 addEventListener('hashchange',()=>{const m=location.hash.match(/^#scan-(\d+)$/);if(m)scanHit(+m[1])});
 $('#fcf').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const s=160/Math.max(im.width,im.height),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);faceImg=c.toDataURL('image/jpeg',.7);$('#bs').textContent='✔ Face check: photo captured'};im.src=URL.createObjectURL(f)};
+async function checkNow(i){if(selDate!==iso(T))return toast('Open today in the Register to check in.');
+ const r=cache[selDate+'_'+i]||{};if(r.in&&r.out)return;
+ if(r.in&&!confirm('Check out '+staff[i]+' now?'))return;
+ const t=new Date(),v=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+ await save(i,r.in?{out:v,outAt:t.toISOString()}:{in:v,inAt:t.toISOString()})}
 function tiles(){let p=0,l=0,v=0;staff.forEach((n,i)=>{const r=cache[selDate+'_'+i]||{};if(r.in){p++;if(r.in>brand.start)l++}else if(r.status)v++});$('#tiles').innerHTML=[['Present',p],['Late',l],['On leave',v],['Not yet',staff.length-p-v]].map(a=>`<div class='tile'><b>${a[1]}</b><span>${a[0]}</span></div>`).join('')}
 let faceImg='',fstream=null,cstream=null,ctimer=null,last='';
 function stopCam(){clearInterval(ctimer);cstream&&cstream.getTracks().forEach(t=>t.stop());cstream=null}
@@ -214,13 +219,14 @@ function sub(){if(!db)return;unsub&&unsub();const ym=$("#yr").value+"-"+String(+
 function render(){if(!selDate)return;$("#sub").textContent=MN[+$("#mo").value]+" "+$("#yr").value;
  $("#list").innerHTML=staff.map((n,i)=>{const r=cache[selDate+"_"+i]||{},late=r.in&&r.in>brand.start;
  return `<div class="st"><div class="top"><div style="display:flex;gap:10px;align-items:center">${av(i)}<div><b>${i+1}. ${esc(n)}</b><div class="mu">${esc((roster[i]||{}).post||"")}</div></div></div>${r.in?`<span class="tag ${late?"late":""}">${late?"Late":"On time"}</span>`:""}</div>
- <div class="g"><div><label>Coming time</label><input type="time" data-i="${i}" data-f="in" value="${r.in||""}"><button class="now" data-i="${i}" data-f="in">Now</button></div>
- <div><label>Out time</label><input type="time" data-i="${i}" data-f="out" value="${r.out||""}"><button class="now" data-i="${i}" data-f="out">Now</button></div></div>
+ <div class="g"><div><label>Coming time</label><input type="time" ${canEdit?"":"readonly"} data-i="${i}" data-f="in" value="${r.in||""}"></div>
+ <div><label>Out time</label><input type="time" ${canEdit?"":"readonly"} data-i="${i}" data-f="out" value="${r.out||""}"></div></div>
+ ${selDate===iso(T)?`<button class="p" data-ck="${i}" style="width:100%;margin-top:8px" ${r.out?"disabled":""}>${!r.in?"✅ Check in":!r.out?"🚪 Check out":"✔ Done for today"}</button>`:""}
  <div class="ln"><select data-i="${i}" data-f="status" style="flex:1">${ST.map(s=>`<option value="${s}" ${r.status==s?"selected":""}>${s||"Status: normal day"}</option>`).join("")}</select></div>
  <div class="ln"><div class="sg">${r.sig?`<img src="${r.sig}" alt="signature">`:""}${r.face?`<img src="${r.face}" alt="face" style="border-radius:50%;width:36px;margin-left:4px">`:""}${r.method?`<div class="tag">${esc(r.method)}</div>`:`<button data-qs="${i}">🔳 Sign with QR</button><button data-sign="${i}">✍️ Sign</button>`}</div><input data-i="${i}" data-f="rem" value="${esc(r.rem||"")}" placeholder="Remarks"></div></div>`}).join("");
  $("#list").querySelectorAll("input,select").forEach(e=>e.onchange=()=>save(+e.dataset.i,{[e.dataset.f]:e.value}));
  $("#list").querySelectorAll(".now").forEach(b=>b.onclick=()=>{const t=new Date();save(+b.dataset.i,{[b.dataset.f]:String(t.getHours()).padStart(2,"0")+":"+String(t.getMinutes()).padStart(2,"0")})});
- $("#list").querySelectorAll("[data-sign]").forEach(b=>b.onclick=()=>openSign(+b.dataset.sign));$("#list").querySelectorAll("[data-qs]").forEach(b=>b.onclick=()=>openScan(+b.dataset.qs));tiles();dash();summary()}
+ $("#list").querySelectorAll("[data-sign]").forEach(b=>b.onclick=()=>openSign(+b.dataset.sign));$("#list").querySelectorAll("[data-qs]").forEach(b=>b.onclick=()=>openScan(+b.dataset.qs));$("#list").querySelectorAll("[data-ck]").forEach(b=>b.onclick=()=>checkNow(+b.dataset.ck));tiles();dash();summary()}
 function hrs(r){if(!r.in||!r.out)return 0;const[a,b]=r.in.split(":"),[c,d]=r.out.split(":");return Math.max(0,(+c*60+ +d)-(+a*60+ +b))/60}
 function summary(){const td=iso(T),days=wdays().map(iso).filter(d=>d<=td);
  $("#sumn").textContent=`${days.length} working day(s) counted so far this month · official start ${brand.start}`;
